@@ -39,7 +39,8 @@ class Bubbleyes_BubblitPlugin_Model_Observer
     {
         try{
             $code = Mage::getSingleton('adminhtml/config_data')->getStore();
-            $storeId = Mage::getModel('core/store')->load($code)->getId();            
+            $store = Mage::getModel('core/store')->load($code);
+            $storeId = $store->getId();            
 
             if($storeId != 0)
             {
@@ -64,7 +65,7 @@ class Bubbleyes_BubblitPlugin_Model_Observer
                     if($itt == $this->_helper->getProductPortionSize())
                     {
                         try {
-                            $this->_helper->CallAPI('importProducts', array('ProductsXML' => self::BuildProductsXML($productsPortion), 'Timestamp' => $timestamp), $storeId);
+                            $this->_helper->CallAPI('importProducts', array('ProductsXML' => self::BuildProductsXML($productsPortion, $store), 'Timestamp' => $timestamp), $storeId);
                         }
                         catch (Exception $exPortion) {
                             $this->_helper->LoggerForException($exPortion);
@@ -74,7 +75,7 @@ class Bubbleyes_BubblitPlugin_Model_Observer
                     }
                 }
 
-                $this->_helper->CallAPI('importProducts', array('ProductsXML' => self::BuildProductsXML($productsPortion), 'Timestamp' => $timestamp, 'IsLastPortion' => true), $storeId);
+                $this->_helper->CallAPI('importProducts', array('ProductsXML' => self::BuildProductsXML($productsPortion, $store), 'Timestamp' => $timestamp, 'IsLastPortion' => true), $storeId);
             }
         }
 		catch (Exception $ex) { 
@@ -224,7 +225,7 @@ class Bubbleyes_BubblitPlugin_Model_Observer
             }
     }
 
-	public static function BuildProductsXML($products) {
+	public static function BuildProductsXML($products, $store) {
 		$productsXML = new SimpleXMLElement('<products/>');
 
 		foreach ($products as $product)
