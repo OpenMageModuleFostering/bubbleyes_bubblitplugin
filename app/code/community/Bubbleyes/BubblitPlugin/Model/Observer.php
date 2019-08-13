@@ -93,12 +93,12 @@ class Bubbleyes_BubblitPlugin_Model_Observer
 		{
 			$productXML = $productsXML -> addChild("product");
 			
-			$productXML -> addAttribute("sku", $product->sku);
+			$productXML -> addAttribute("sku", htmlspecialchars($product->sku, ENT_QUOTES));
 
-			$productXML -> addChild("shopurl", $product-> getProductUrl());
+			$productXML -> addChild("shopurl", htmlspecialchars($product-> getProductUrl(), ENT_QUOTES));
 			
-			$productXML -> addChild("name", $product->name);
-			$productXML -> addChild("description", $product->short_description);
+			$productXML -> addChild("name", htmlspecialchars($product->name, ENT_QUOTES));
+			$productXML -> addChild("description", htmlspecialchars($product->short_description, ENT_QUOTES));
 			$productXML -> addChild("currency", Mage::app()->getStore()->getCurrentCurrencyCode());
 			$productXML -> addChild("price", number_format($product->price, 2, '.', ''));
 
@@ -112,10 +112,10 @@ class Bubbleyes_BubblitPlugin_Model_Observer
 			$categories = $product -> getCategoryCollection() -> addAttributeToSelect(array('name'));
 			if(count($categories) > 0)
 			{
-				$productXML -> addChild("category", $categories -> getFirstItem() -> getName());
+				$productXML -> addChild("category", htmlspecialchars($categories -> getFirstItem() -> getName(), ENT_QUOTES));
 			}
 
-			$productXML -> addChild("image", $product -> getImage() != 'no_selection' ? $product -> getImageUrl() : null);
+			$productXML -> addChild("image", htmlspecialchars($product -> getImage() != 'no_selection' ? $product -> getImageUrl() : null, ENT_QUOTES));
 		}
 
 		return $productsXML->asXML();

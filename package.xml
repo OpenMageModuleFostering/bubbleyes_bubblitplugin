@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
     <name>Bubbleyes_BubblitPlugin</name>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <stability>stable</stability>
     <license uri="http://opensource.org/licenses/bsd-license.php">BSDL</license>
     <channel>community</channel>
@@ -9,13 +9,11 @@
     <summary>Connect customers and web stores&#xD;
 in a unique and dynamic way: Bubbl!</summary>
     <description>It's simple. End-consumers from all over the world surf the Internet, finding products which interest them- but the prices are slightly higher than they are willing to pay. With a simple click, these products are stored in a single convenient collection.</description>
-    <notes>- First release&#xD;
-- Supporting configuration of the module in the settings administration&#xD;
-- Supporting visualization of the BubblitPlugin in the product details page</notes>
+    <notes>- Compatibility with PHP5.3 and below</notes>
     <authors><author><name>Terje Lindstad</name><user>tlindstad</user><email>terjelindstad@bubbleyes.com</email></author></authors>
     <date>2015-01-22</date>
-    <time>14:00:50</time>
-    <contents><target name="magecommunity"><dir><dir name="Bubbleyes"><dir name="BubblitPlugin"><dir name="Block"><file name="Button.php" hash="5b9ee082aa8542c2204b1ad86cec1272"/></dir><dir name="Helper"><file name="Data.php" hash="638a8f76ead78a1f84f99b5adc26b2b4"/></dir><dir name="Model"><dir name="Config"><dir name="Source"><file name="Bubbllayout.php" hash="ea03544f51545df9803dc3fb0d69ce30"/><dir name="Helpinfo"><file name="Comment.php" hash="eaa644af07bf619a06805184e1daffbd"/></dir></dir></dir><file name="Observer.php" hash="81f04622c37f3f46890bfcc1c28c2b41"/></dir><dir name="etc"><file name="config.xml" hash="042fd5e76f03266d2f22e4e7025d06b1"/><file name="system.xml" hash="3b8dde9a695682f52559ee57df8258c2"/></dir></dir></dir></dir></target><target name="mageetc"><dir><dir name="modules"><file name="Bubbleyes_BubblitPlugin.xml" hash="0691ad097f8ca937d80ad4936607fea5"/></dir></dir></target><target name="magedesign"><dir><dir name="frontend"><dir name="base"><dir name="default"><dir name="layout"><file name="Bubbleyes_BubblitPlugin.xml" hash="2b172171473b55f2c4596f1eacee7e63"/></dir><dir name="template"><dir name="BubblitPlugin"><file name="button.phtml" hash="18199c13f81a042985363824986156c0"/></dir></dir></dir></dir><dir name="Bubbleyes"><dir name="default"><dir name="etc"><file name="theme.xml" hash="5c4fce4eb634014e556a22cec2a76d20"/></dir><dir name="layout"><file name="local.xml" hash="01c78642851f6e17d1057882f893d3c1"/></dir><dir name="template"><dir name="catalog"><dir name="product"><dir name="view"><file name="sharing.phtml" hash="5be2544566332d003f3bb16579a96498"/></dir></dir></dir></dir></dir></dir></dir></dir></target></contents>
+    <time>14:52:06</time>
+    <contents><target name="magecommunity"><dir><dir name="Bubbleyes"><dir name="BubblitPlugin"><dir name="Block"><file name="Button.php" hash="5b9ee082aa8542c2204b1ad86cec1272"/></dir><dir name="Helper"><file name="Data.php" hash="638a8f76ead78a1f84f99b5adc26b2b4"/></dir><dir name="Model"><dir name="Config"><dir name="Source"><file name="Bubbllayout.php" hash="ea03544f51545df9803dc3fb0d69ce30"/><dir name="Helpinfo"><file name="Comment.php" hash="eaa644af07bf619a06805184e1daffbd"/></dir></dir></dir><file name="Observer.php" hash="81840c62dcf864639a9f980cf7a65249"/></dir><dir name="etc"><file name="config.xml" hash="042fd5e76f03266d2f22e4e7025d06b1"/><file name="system.xml" hash="3b8dde9a695682f52559ee57df8258c2"/></dir></dir></dir></dir></target><target name="mageetc"><dir><dir name="modules"><file name="Bubbleyes_BubblitPlugin.xml" hash="0691ad097f8ca937d80ad4936607fea5"/></dir></dir></target><target name="magedesign"><dir><dir name="frontend"><dir name="base"><dir name="default"><dir name="layout"><file name="Bubbleyes_BubblitPlugin.xml" hash="2b172171473b55f2c4596f1eacee7e63"/></dir><dir name="template"><dir name="BubblitPlugin"><file name="button.phtml" hash="18199c13f81a042985363824986156c0"/></dir></dir></dir></dir><dir name="Bubbleyes"><dir name="default"><dir name="etc"><file name="theme.xml" hash="5c4fce4eb634014e556a22cec2a76d20"/></dir><dir name="layout"><file name="local.xml" hash="01c78642851f6e17d1057882f893d3c1"/></dir><dir name="template"><dir name="catalog"><dir name="product"><dir name="view"><file name="sharing.phtml" hash="5be2544566332d003f3bb16579a96498"/></dir></dir></dir></dir></dir></dir></dir></dir></target></contents>
     <compatible/>
     <dependencies><required><php><min>4.5.0</min><max>10.0.0</max></php></required></dependencies>
 </package>
