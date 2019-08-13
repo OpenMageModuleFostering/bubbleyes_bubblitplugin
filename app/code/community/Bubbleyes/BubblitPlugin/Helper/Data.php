@@ -2,7 +2,7 @@
   class Bubbleyes_BubblitPlugin_Helper_Data extends Mage_Core_Helper_Abstract
   {
     static $APIAddress = "http://api.bubbleyes.com/client/";
-    static $Version = 'magento 1.2.0';
+    static $Version = 'magento 1.3.0';
     static $ProductsPortionSize = 25;
   
     public static function getProductPortionSize() {

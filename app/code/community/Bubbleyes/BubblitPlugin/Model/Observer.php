@@ -17,34 +17,42 @@ class Bubbleyes_BubblitPlugin_Model_Observer
 
 		    if($product->sku != null)
 		    {
-			    $categories = $product -> getCategoryCollection() -> addAttributeToSelect(array('name'));
-			    $productCategory = null;
-			    if(count($categories) > 0)
-			    {
-				    $productCategory = $categories -> getFirstItem() -> getName();
-			    }
+                // create or update
+                if($product->visibility != Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE) {
+			        $categories = $product -> getCategoryCollection() -> addAttributeToSelect(array('name'));
+			        
+                    $productCategory = NULL;
+                    $productCategoryId = NULL;
+			        if(count($categories) > 0)
+			        {
+                        $category = $categories -> getFirstItem();
+				        $productCategory = $category -> getName();
+				        $productCategoryId = $category -> getId();
+                    }
 
-                $productImage = null;
-                try{
-                    $productImage = $product -> getImage() != 'no_selection' ? $product -> getImageUrl() : null;
+                    $productImage = $this->GetImageUrl($product);
+
+			        $productData = array(
+				        'SKU'               => $product->sku,
+				        'Name'				=> $product->name,
+				        'ShopUrl'			=> $product-> getProductUrl(),
+				        'Description'		=> $product->short_description,
+				        'Currency'			=> Mage::app()->getStore()->getCurrentCurrencyCode(),
+				        'Price'             => number_format($product->price, 2, '.', ''),
+				        'DiscountedPrice'   => $product-> special_price == null ? null : number_format($product-> special_price, 2, '.', ''),
+				        'IsActive'			=> ($product -> status) == 1 ? "true" : "false",
+				        'Image'				=> $productImage,
+				        'Category'			=> $productCategory,
+                        'CategoryId'        => $productCategoryId
+			        );
+
+			        $this->_helper->CallAPI('createOrEditProduct', array('Product' => $productData));
+		        }
+                //delete
+                else {
+		            self::DeleteProduct($product, $this->_helper);
                 }
-                catch(Exception $exImage) { }
-
-			    $productData = array(
-				    'SKU'               => $product->sku,
-				    'Name'				=> $product->name,
-				    'ShopUrl'			=> $product-> getProductUrl(),
-				    'Description'		=> $product->short_description,
-				    'Currency'			=> Mage::app()->getStore()->getCurrentCurrencyCode(),
-				    'Price'             => number_format($product->price, 2, '.', ''),
-				    'DiscountedPrice'   => $product-> special_price == null ? null : number_format($product-> special_price, 2, '.', ''),
-				    'IsActive'			=> ($product -> status) == 1 ? "true" : "false",
-				    'Image'				=> $productImage,
-				    'Category'			=> $productCategory
-			    );
-
-			    $this->_helper->CallAPI('createOrEditProduct', array('Product' => $productData));
-		    }
+            }
         }
 		catch (Exception $ex) { 
             $this->_helper->LoggerForException($ex);
@@ -55,11 +63,7 @@ class Bubbleyes_BubblitPlugin_Model_Observer
     {
         try{
             $product = $observer->getEvent()->getProduct();	
-		    $productData = array(
-                'SKU' => $product->sku
-            );
-
-		    $this->_helper->CallAPI('deleteProduct', array('Product' => $productData));
+		    self::DeleteProduct($product, $this->_helper);
         }
 		catch (Exception $ex) { 
             $this->_helper->LoggerForException($ex);
@@ -69,7 +73,9 @@ class Bubbleyes_BubblitPlugin_Model_Observer
 	public function HandleSettingsChanged(Varien_Event_Observer $observer)
     {
         try{
-		    $products = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect(array('name', 'short_description', 'price', 'special_price', 'currency', 'status', 'image'));
+		    $products = Mage::getModel('catalog/product')->getCollection()->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE))->addAttributeToSelect(array('name', 'short_description', 'price', 'special_price', 'currency', 'status', 'image'));
+
+            $timestamp = date('YmdHis');
 
             //do in portions
             $itt = 0;
@@ -82,7 +88,7 @@ class Bubbleyes_BubblitPlugin_Model_Observer
                 if($itt == $this->_helper->getProductPortionSize())
                 {
                     try {
-                        $this->_helper->CallAPI('importProducts', array('ProductsXML' => self::BuildProductsXML($productsPortion)));
+                        $this->_helper->CallAPI('importProducts', array('ProductsXML' => self::BuildProductsXML($productsPortion), 'Timestamp' => $timestamp));
                     }
                     catch (Exception $exPortion) {
                         $this->_helper->LoggerForException($exPortion);
@@ -92,14 +98,34 @@ class Bubbleyes_BubblitPlugin_Model_Observer
                 }
             }
 
-            if($itt > 0)
-            {
-                 $this->_helper->CallAPI('importProducts', array('ProductsXML' => self::BuildProductsXML($productsPortion)));
-            }
+            $this->_helper->CallAPI('importProducts', array('ProductsXML' => self::BuildProductsXML($productsPortion), 'Timestamp' => $timestamp, 'IsLastPortion' => true));
         }
 		catch (Exception $ex) { 
             $this->_helper->LoggerForException($ex);
         }
+    }
+
+    public static function GetImageUrl($product) {
+        $productMediaConfig = Mage::getModel('catalog/product_media_config');
+
+        $productImage = $product->getImage();
+        
+        if($productImage == 'no_selection') {
+            $productImage = NULL;
+        }
+        else {
+            $productImage = $productMediaConfig->getMediaUrl($productImage);
+        }
+
+        return $productImage;
+    }
+
+    public static function DeleteProduct($product, $helper) {
+        	$productData = array(
+                'SKU' => $product->sku
+            );
+
+		    $helper->CallAPI('deleteProduct', array('Product' => $productData));
     }
 
 	public static function BuildProductsXML($products) {
@@ -125,18 +151,15 @@ class Bubbleyes_BubblitPlugin_Model_Observer
 
 			$productXML -> addChild("active", ($product -> status) == 1 ? "true" : "false");
 
-			$categories = $product -> getCategoryCollection() -> addAttributeToSelect(array('name'));
+			$categories = $product -> getCategoryCollection() -> addAttributeToSelect(array('name','id'));
 			if(count($categories) > 0)
 			{
-				$productXML -> addChild("category", htmlspecialchars($categories -> getFirstItem() -> getName(), ENT_QUOTES));
-			}
-
-            $productImage = null;
-            try{
-                $productImage = $product -> getImage() != 'no_selection' ? $product -> getImageUrl() : null;
+                $category = $categories -> getFirstItem();
+				$productXML -> addChild("category", htmlspecialchars($category -> getName(), ENT_QUOTES));
+				$productXML -> addChild("categoryId", $category -> getId());
             }
-            catch(Exception $exImage) { }
 
+            $productImage = self::GetImageUrl($product);
 			$productXML -> addChild("image", htmlspecialchars($productImage, ENT_QUOTES));
 		}
 

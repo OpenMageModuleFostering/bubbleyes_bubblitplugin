@@ -20,9 +20,7 @@ class Bubbleyes_BubblitPlugin_Block_Button
                     'SKU' => $productSKU
                 );
 
-                $settings = array(
-                    'Type' => $this->_helper->getBubblLayout()
-                );
+                $settings = NULL;
 
 		        $tmp = $this->_helper->CallAPIWithResponse('getProductScript', array('Product' => $productData, 'Settings' => $settings));
                 return $tmp["Script"];
