@@ -2,7 +2,7 @@
   class Bubbleyes_BubblitPlugin_Helper_Data extends Mage_Core_Helper_Abstract
   {
     static $APIAddress = "http://api.bubbleyes.com/client/";
-    static $ProductsPortionSize = 100;
+    static $ProductsPortionSize = 25;
   
     public static function getProductPortionSize() {
       return self::$ProductsPortionSize;
@@ -39,7 +39,8 @@
 			curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, false);
             curl_setopt($curl, CURLOPT_NOSIGNAL, 1);
-            curl_setopt($curl, CURLOPT_TIMEOUT , 250);
+            curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
+            curl_setopt($curl, CURLOPT_TIMEOUT, 1);
 
 			curl_exec($curl);
 

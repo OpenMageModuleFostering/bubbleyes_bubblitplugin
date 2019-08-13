@@ -24,7 +24,8 @@ class Bubbleyes_BubblitPlugin_Block_Button
                     'Type' => $this->_helper->getBubblLayout()
                 );
 
-		        return $this->_helper->CallAPIWithResponse('getProductScript', array('Product' => $productData, 'Settings' => $settings))["Script"];
+		        $tmp = $this->_helper->CallAPIWithResponse('getProductScript', array('Product' => $productData, 'Settings' => $settings));
+                return $tmp["Script"];
             }
         }
 		catch (Exception $ex) { }

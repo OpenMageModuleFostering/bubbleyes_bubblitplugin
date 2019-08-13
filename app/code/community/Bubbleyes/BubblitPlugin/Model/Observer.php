@@ -62,19 +62,25 @@ class Bubbleyes_BubblitPlugin_Model_Observer
 		    $products = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect(array('name', 'short_description', 'price', 'special_price', 'currency', 'status', 'image'));
 
             //do in portions
+            $itt = 0;
+            $productsPortion = array();
             foreach($products as $product)
             {
-                $productsPortion = array();
+                array_push($productsPortion, $product);
+                $itt++;
 
-                $itt = 0;
-                while($itt < $this->_helper->getProductPortionSize())
+                if($itt == $this->_helper->getProductPortionSize())
                 {
-                
-                     array_push($productsPortion, $product);
-                     $itt++;
+                    $this->_helper->CallAPI('importProducts', array('ProductsXML' => self::BuildProductsXML($productsPortion)));
+                    
+                    $itt = 0;
+                    $productsPortion = array();
                 }
+            }
 
-                $this->_helper->CallAPI('importProducts', array('ProductsXML' => self::BuildProductsXML($productsPortion)));
+            if($itt > 0)
+            {
+                 $this->_helper->CallAPI('importProducts', array('ProductsXML' => self::BuildProductsXML($productsPortion)));
             }
         }
 		catch (Exception $ex) { }
