@@ -2,7 +2,7 @@
   class Bubbleyes_BubblitPlugin_Helper_Data extends Mage_Core_Helper_Abstract
   {
     static $APIAddress = "http://api.bubbleyes.com/client/";
-    static $Version = 'magento 1.3.0';
+    static $Version = 'magento 2.0.0';
     static $ProductsPortionSize = 25;
   
     public static function getProductPortionSize() {
@@ -25,7 +25,7 @@
 		  return Mage::getStoreConfig('BubbleyesBubblitPluginOptions/bubbl_layout/bubbllayout', $storeId);
     }
 
-   public static function CallAPI($method, $params) {
+   public static function CallAPI($method, $params, $storeId) {
 		$data = json_encode($params);
 
 		$response = null;
@@ -33,14 +33,14 @@
 		if ($curl = curl_init()) {		
 			curl_setopt($curl, CURLOPT_URL, self::getAPIMethod($method));
 			curl_setopt($curl, CURLOPT_HTTPHEADER, array( 
-						'Authorization: Basic ' . self::getAPIKey(),
+						'Authorization: Basic ' . self::getAPIKey($storeId),
 						'Content-Type: application/json',
 						'Content-Length: ' . strlen($data)));
-			curl_setopt($curl, CURLOPT_POST, true);
+			curl_setopt($curl, CURLOPT_POST, TRUE);
 			curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, false);
-            curl_setopt($curl, CURLOPT_NOSIGNAL, 1);
-            curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($curl, CURLOPT_NOSIGNAL, TRUE);
+            curl_setopt($curl, CURLOPT_FRESH_CONNECT, TRUE);
             curl_setopt($curl, CURLOPT_TIMEOUT, 1);
 
 			curl_exec($curl);
@@ -49,7 +49,7 @@
 		}
 	}
 
-   public static function CallAPIWithResponse($method, $params) {
+   public static function CallAPIWithResponse($method, $params, $storeId) {
 		$data = json_encode($params);
 
 		$response = null;
@@ -57,13 +57,13 @@
 		if ($curl = curl_init()) {		
 			curl_setopt($curl, CURLOPT_URL, self::getAPIMethod($method));
 			curl_setopt($curl, CURLOPT_HTTPHEADER, array( 
-						'Authorization: Basic ' . self::getAPIKey(),
+						'Authorization: Basic ' . self::getAPIKey($storeId),
 						'Content-Type: application/json',
 						'Content-Length: ' . strlen($data)));
-			curl_setopt($curl, CURLOPT_POST, true);
+			curl_setopt($curl, CURLOPT_POST, TRUE);
 			curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curl, CURLOPT_NOSIGNAL, 1);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($curl, CURLOPT_NOSIGNAL, TRUE);
 
 			$response = curl_exec($curl);
 

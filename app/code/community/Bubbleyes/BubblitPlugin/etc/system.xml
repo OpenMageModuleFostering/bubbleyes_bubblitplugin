@@ -14,34 +14,34 @@
             <sort_order>1</sort_order>
             <show_in_default>1</show_in_default>
             <show_in_website>0</show_in_website>
-            <show_in_store>0</show_in_store>
+            <show_in_store>1</show_in_store>
             <groups>
                 <api_access translate="label">
                     <label>API Access</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>1</sort_order>
-                    <show_in_default>1</show_in_default>
+                    <show_in_default>0</show_in_default>
                     <show_in_website>0</show_in_website>
-                    <show_in_store>0</show_in_store>
+                    <show_in_store>1</show_in_store>
                     <expanded>1</expanded>
                     <fields>
                         <api_key translate="label comment">
                             <label>API key</label>
-                            <comment><![CDATA[API key providing access to the Bubbleyes API.]]></comment>
+                            <comment><![CDATA[API key providing access to the Bubbleyes API. <br/> The API Key needs to be distinct for each Store View.]]></comment>
                             <frontend_type>text</frontend_type>
                             <sort_order>1</sort_order>
-                            <show_in_default>1</show_in_default>
+                            <show_in_default>0</show_in_default>
                             <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
+                            <show_in_store>1</show_in_store>
                         </api_key>
                     </fields>
                 </api_access>
                 <bubbl_layout translate="label">
                     <label>Bubbl Button</label>
                     <sort_order>2</sort_order>
-                    <show_in_default>1</show_in_default>
+                    <show_in_default>0</show_in_default>
                     <show_in_website>0</show_in_website>
-                    <show_in_store>0</show_in_store>
+                    <show_in_store>1</show_in_store>
                     <expanded>1</expanded>
                     <fields>
                         <bubblenabled translate="label comment">
@@ -50,9 +50,9 @@
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>2</sort_order>
-                            <show_in_default>1</show_in_default>
+                            <show_in_default>0</show_in_default>
                             <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
+                            <show_in_store>1</show_in_store>
                         </bubblenabled>
                         <bubbllayout translate="label comment">
                             <label>Bubbl Button Layout</label>

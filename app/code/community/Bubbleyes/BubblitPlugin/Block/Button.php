@@ -12,17 +12,18 @@ class Bubbleyes_BubblitPlugin_Block_Button
     public function getProductScript()
     {
         try{
-            if($this->_helper->isBubblEnabledInDetails())
-            {
-		        $productSKU = $this -> getProduct() -> sku;
-		
+            $product = $this -> getProduct();
+            $storeId = $product -> getStoreId();
+
+            if($this->_helper->isBubblEnabledInDetails($storeId))
+            {		
 		        $productData = array(
-                    'SKU' => $productSKU
+                    'SKU' => $product -> sku
                 );
 
                 $settings = NULL;
 
-		        $tmp = $this->_helper->CallAPIWithResponse('getProductScript', array('Product' => $productData, 'Settings' => $settings));
+		        $tmp = $this->_helper->CallAPIWithResponse('getProductScript', array('Product' => $productData, 'Settings' => $settings), $storeId);
                 return $tmp["Script"];
             }
         }
