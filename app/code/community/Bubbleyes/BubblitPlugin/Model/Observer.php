@@ -24,6 +24,12 @@ class Bubbleyes_BubblitPlugin_Model_Observer
 				    $productCategory = $categories -> getFirstItem() -> getName();
 			    }
 
+                $productImage = null;
+                try{
+                    $productImage = $product -> getImage() != 'no_selection' ? $product -> getImageUrl() : null;
+                }
+                catch(Exception $exImage) { }
+
 			    $productData = array(
 				    'SKU'               => $product->sku,
 				    'Name'				=> $product->name,
@@ -33,14 +39,16 @@ class Bubbleyes_BubblitPlugin_Model_Observer
 				    'Price'             => number_format($product->price, 2, '.', ''),
 				    'DiscountedPrice'   => $product-> special_price == null ? null : number_format($product-> special_price, 2, '.', ''),
 				    'IsActive'			=> ($product -> status) == 1 ? "true" : "false",
-				    'Image'				=> $product -> getImage() != 'no_selection' ? $product -> getImageUrl() : null,
+				    'Image'				=> $productImage,
 				    'Category'			=> $productCategory
 			    );
 
 			    $this->_helper->CallAPI('createOrEditProduct', array('Product' => $productData));
 		    }
         }
-		catch (Exception $ex) { }
+		catch (Exception $ex) { 
+            $this->_helper->LoggerForException($ex);
+        }
     }
 
 	public function HandleProductDelete(Varien_Event_Observer $observer)
@@ -53,7 +61,9 @@ class Bubbleyes_BubblitPlugin_Model_Observer
 
 		    $this->_helper->CallAPI('deleteProduct', array('Product' => $productData));
         }
-		catch (Exception $ex) { }
+		catch (Exception $ex) { 
+            $this->_helper->LoggerForException($ex);
+        }
     }
 
 	public function HandleSettingsChanged(Varien_Event_Observer $observer)
@@ -71,8 +81,12 @@ class Bubbleyes_BubblitPlugin_Model_Observer
 
                 if($itt == $this->_helper->getProductPortionSize())
                 {
-                    $this->_helper->CallAPI('importProducts', array('ProductsXML' => self::BuildProductsXML($productsPortion)));
-                    
+                    try {
+                        $this->_helper->CallAPI('importProducts', array('ProductsXML' => self::BuildProductsXML($productsPortion)));
+                    }
+                    catch (Exception $exPortion) {
+                        $this->_helper->LoggerForException($exPortion);
+                    }
                     $itt = 0;
                     $productsPortion = array();
                 }
@@ -83,7 +97,9 @@ class Bubbleyes_BubblitPlugin_Model_Observer
                  $this->_helper->CallAPI('importProducts', array('ProductsXML' => self::BuildProductsXML($productsPortion)));
             }
         }
-		catch (Exception $ex) { }
+		catch (Exception $ex) { 
+            $this->_helper->LoggerForException($ex);
+        }
     }
 
 	public static function BuildProductsXML($products) {
@@ -115,7 +131,13 @@ class Bubbleyes_BubblitPlugin_Model_Observer
 				$productXML -> addChild("category", htmlspecialchars($categories -> getFirstItem() -> getName(), ENT_QUOTES));
 			}
 
-			$productXML -> addChild("image", htmlspecialchars($product -> getImage() != 'no_selection' ? $product -> getImageUrl() : null, ENT_QUOTES));
+            $productImage = null;
+            try{
+                $productImage = $product -> getImage() != 'no_selection' ? $product -> getImageUrl() : null;
+            }
+            catch(Exception $exImage) { }
+
+			$productXML -> addChild("image", htmlspecialchars($productImage, ENT_QUOTES));
 		}
 
 		return $productsXML->asXML();

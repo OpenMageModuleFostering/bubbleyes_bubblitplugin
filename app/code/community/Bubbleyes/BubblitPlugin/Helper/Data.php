@@ -2,6 +2,7 @@
   class Bubbleyes_BubblitPlugin_Helper_Data extends Mage_Core_Helper_Abstract
   {
     static $APIAddress = "http://api.bubbleyes.com/client/";
+    static $Version = 'magento 1.2.0';
     static $ProductsPortionSize = 25;
   
     public static function getProductPortionSize() {
@@ -71,5 +72,19 @@
 
         return (array)json_decode($response, true);
 	}
+
+   public static function LoggerForException($ex) {
+       try {
+                self::CallAPI('logException', array(
+                    'ExceptionMessage' => $ex-> getMessage(),
+                    'ExceptionStackTrace' => $ex -> getTraceAsString(),
+                    'Platform' => self::$Version
+                ));
+       }
+       catch (Exception $logEx) { }
+
+      return null;
+   }
+
   } 
 ?>
