@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- The root node for Magento module configuration -->
+<config>
+  <modules>
+
+    <Bubbleyes_BubblitPlugin>
+      <version>1.0.0</version>
+    </Bubbleyes_BubblitPlugin>
+
+  </modules>
+
+
+  <!-- Configure our module's behavior in the global scope -->
+  <global>
+
+    <!-- Defining models -->
+    <models>
+      <bubbleyes_bubblitplugin>
+        <class>Bubbleyes_BubblitPlugin_Model</class>
+      </bubbleyes_bubblitplugin>
+    </models>
+    
+    <!-- Defining an event observer -->
+    <events>
+      <!-- The code of the events we want to observe -->
+      <catalog_product_save_after>
+        <observers>
+          <bubbleyes_bubblitplugin>
+            <type>singleton</type>
+            <class>bubbleyes_bubblitplugin/observer</class>
+            <method>HandleProductUpdate</method>
+          </bubbleyes_bubblitplugin>
+        </observers>
+      </catalog_product_save_after>
+
+      <catalog_product_delete_after>
+        <observers>
+          <bubbleyes_bubblitplugin>
+            <type>singleton</type>
+            <class>bubbleyes_bubblitplugin/observer</class>
+            <method>HandleProductDelete</method>
+          </bubbleyes_bubblitplugin>
+        </observers>
+      </catalog_product_delete_after>
+
+      <admin_system_config_changed_section_BubbleyesBubblitPluginOptions>
+        <observers>
+          <bubbleyes_bubblitplugin>
+            <type>singleton</type>
+            <class>bubbleyes_bubblitplugin/observer</class>
+            <method>HandleSettingsChanged</method>
+          </bubbleyes_bubblitplugin>
+        </observers>
+      </admin_system_config_changed_section_BubbleyesBubblitPluginOptions>
+    </events>
+
+    <helpers>
+      <Bubbleyes_BubblitPlugin>
+        <class>Bubbleyes_BubblitPlugin_Helper</class>
+      </Bubbleyes_BubblitPlugin>
+    </helpers>
+	
+	
+	 <blocks>
+            <BubblitPlugin>             
+                <class>Bubbleyes_BubblitPlugin_Block</class>
+            </BubblitPlugin>
+     </blocks>
+  </global>
+
+
+<!-- we are making changes to the frontend -->
+    <frontend>
+        <layout>
+            <updates>
+                <Bubbleyes_BubblitPlugin module="Bubbleyes_BubblitPlugin">
+                    <file>Bubbleyes_BubblitPlugin.xml</file>                   
+                </Bubbleyes_BubblitPlugin>
+            </updates>            
+        </layout>        
+    </frontend>
+
+  <adminhtml>
+    <acl>
+      <resources>
+        <admin>
+          <children>
+            <system>
+              <children>
+                <config>
+                  <children>
+                    <BubbleyesBubblitPluginOptions>
+                      <title>Bubbleyes BubblitPlugin Module Section</title>
+                    </BubbleyesBubblitPluginOptions>
+                  </children>
+                </config>
+              </children>
+            </system>
+          </children>
+        </admin>
+      </resources>
+    </acl>
+  </adminhtml>
+</config>

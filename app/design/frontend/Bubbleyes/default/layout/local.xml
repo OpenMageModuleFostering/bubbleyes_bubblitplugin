@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<layout>
+
+        <catalog_product_view>
+
+            <block name="product.info.sharing">
+                <action method="append"><name>BubblitPlugin.button</name></action>
+            </block>
+
+            <reference name="content">
+                <action method="unsetChild"><name>BubblitPlugin.button</name></action>
+            </reference>
+
+        </catalog_product_view>
+
+</layout>

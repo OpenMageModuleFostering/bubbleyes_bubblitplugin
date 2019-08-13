@@ -1,0 +1,9 @@
+<layout>
+    <catalog_product_view>
+        <reference name="content">
+                <block type="BubblitPlugin/button" 
+			           name="BubblitPlugin.button" 
+			           template="BubblitPlugin/button.phtml" />
+        </reference>
+    </catalog_product_view>
+</layout>
