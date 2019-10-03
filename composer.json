@@ -1,17 +1,5 @@
 {
-    "name": "OpenMageModuleFostering/Bubbleyes_BubblitPlugin",
-    "type": "magento-module",
-    "license": "BSDL",
-    "homepage": "",
-    "description": "Connect customers and web stores
-in a unique and dynamic way: Bubbl!",
-    "authors": [
-    {
-        "name": "Terje Lindstad",
-        "email": "terjelindstad@bubbleyes.com"
-    }
-],
-    "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+    "keywords": [
+        "openmage-module"
+    ]
 }
